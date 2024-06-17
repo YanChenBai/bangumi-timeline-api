@@ -1,5 +1,6 @@
 import puppeteer, { Page } from "puppeteer";
 import type { Bangumi } from "../types";
+import { getDay } from "../utils";
 
 export default async function (): Promise<Bangumi[][]> {
   async function getCurList(page: Page) {
@@ -42,18 +43,6 @@ export default async function (): Promise<Bangumi[][]> {
     return res;
   }
 
-  async function findStartIndex(page: Page) {
-    return await page.$eval(".form-banner-head", (el) => {
-      let startIndex = 0;
-      el.querySelectorAll("banner-filter-wrap").forEach((item, index) => {
-        if (item.classList.contains("banner-filter-item-activ")) {
-          startIndex = index;
-        }
-      });
-      return startIndex + 1;
-    });
-  }
-
   function clickAwait(page: Page, index: number) {
     return new Promise<void>(async (res, rej) => {
       const startContent = await page.$eval(
@@ -85,14 +74,14 @@ export default async function (): Promise<Bangumi[][]> {
           clearTimeout(timeOutTimer);
           res();
         }
-      }, 1000);
+      }, 500);
     });
   }
 
   const list: Bangumi[][] = [[], [], [], [], [], [], []];
 
   const browser = await puppeteer.launch({
-    //   headless: false,
+    // headless: false,
   });
 
   const page = await browser.newPage();
@@ -106,7 +95,7 @@ export default async function (): Promise<Bangumi[][]> {
   await page.waitForSelector(".form-banner-module");
 
   // 获取第一次进来的数据
-  const startIndex = await findStartIndex(page);
+  const startIndex = getDay();
   const startRes = await getCurList(page);
   list[startIndex - 1] = startRes;
 

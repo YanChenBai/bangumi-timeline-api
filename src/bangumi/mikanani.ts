@@ -18,7 +18,6 @@ export default async function (): Promise<Bangumi[][]> {
     if (!indexStr || indexStr === "7") return;
 
     const index = indexStr === "0" ? 6 : Number(indexStr) - 1;
-    console.log(index);
 
     const item = $(el)
       .find("li")

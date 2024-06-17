@@ -1,4 +1,5 @@
 import type { Bangumi } from "../types";
+import { getDay } from "../utils";
 
 interface Resp {
   code: number;
@@ -40,15 +41,10 @@ interface Iconfont {
   text: string;
 }
 
-function getDay() {
-  const date = new Date();
-  const nowDay = date.getDay();
-  return nowDay === 0 ? 7 : nowDay;
-}
-
 export default async function (): Promise<Bangumi[][]> {
-  const before = getDay() - 1;
-  const after = 7 - getDay();
+  const day = getDay();
+  const before = day - 1;
+  const after = 7 - day;
   return await fetch(
     `https://api.bilibili.com/pgc/web/timeline?types=1&before=${before}&after=${after}`
   )
