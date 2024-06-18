@@ -1,5 +1,6 @@
 import { CronJob } from "cron";
 import { tencent, bilibili, mikanani, tl5dm } from "./bangumi";
+import cacheStart from "./cacheImgs";
 import { BangumiDB } from "./db";
 
 const db = new BangumiDB();
@@ -12,10 +13,12 @@ const tasks = {
 };
 
 async function runTasks() {
+  console.log("start get timeline..");
+
   const data = new Date();
   const startTime = data.getTime();
 
-  console.log("starttime:", data);
+  console.log("start time:", data);
 
   for (const [key, task] of Object.entries(tasks)) {
     try {
@@ -29,15 +32,18 @@ async function runTasks() {
   }
 
   const diff = Date.now() - startTime;
-  console.log("使用时间:", `${(diff / 1000).toFixed(2)}s`);
-  console.log("endtime:", new Date());
+  console.log("used time:", `${(diff / 1000).toFixed(2)}s`);
+  console.log("end time:", new Date());
 }
 
 function bootstrap() {
   const job = new CronJob(
     "0 0 */12 * * *",
-    function () {
-      runTasks();
+    async function () {
+      await runTasks();
+      console.log("------------------------------------");
+      await cacheStart();
+      console.log("------------------------------------");
     }, // onTick
     null, // onComplete
     true, // start

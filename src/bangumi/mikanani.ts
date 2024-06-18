@@ -34,7 +34,7 @@ export default async function (): Promise<Bangumi[][]> {
           name,
           updateTime,
           url: `https://mikanani.me${url}`,
-          cover: getOrgin(`https://mikan.bycrx.ltd${cover}`),
+          cover: getOrgin(`https://mikanani.me${cover}`),
           episode: "",
         };
         return data;
