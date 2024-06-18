@@ -32,7 +32,7 @@ export class BangumiDB {
     if (resp) {
       return {
         ...resp,
-        value: JSON.parse(resp.value) as Bangumi,
+        value: JSON.parse(resp.value) as Bangumi[][],
       };
     }
     return null;
@@ -42,7 +42,7 @@ export class BangumiDB {
     return (await this.prisma.data.findMany()).map((item) => {
       return {
         ...item,
-        value: JSON.parse(item.value) as Bangumi,
+        value: JSON.parse(item.value) as Bangumi[][],
       };
     });
   }
