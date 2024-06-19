@@ -52,7 +52,7 @@ async function bootstrap() {
 
       return response;
     },
-    port: 3000,
+    port: Number(process.env.PORT || 3000),
   });
 
   console.log(
