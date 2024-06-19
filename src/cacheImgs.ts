@@ -54,7 +54,7 @@ async function cacheImg(url: string) {
 
   const buffer = await response.arrayBuffer();
 
-  const path = joinPath(joinSuffix(imgName));
+  const path = joinPath(imgName);
   return await sharp(buffer)
     .resize({
       width: 290,
