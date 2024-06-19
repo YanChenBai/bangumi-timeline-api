@@ -10,7 +10,7 @@ async function getImgCache(url: URL) {
     const isCache = await isCacheImg(img);
 
     if (isCache) {
-      const path = joinPath(joinSuffix(getCacheImgName(img)));
+      const path = joinPath(getCacheImgName(img));
       return new Response(Bun.file(path));
     } else {
       return new Response(Bun.file("./src/imgerror.png"));
