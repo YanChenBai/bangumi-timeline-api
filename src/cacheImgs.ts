@@ -55,7 +55,12 @@ async function cacheImg(url: string) {
   const buffer = await response.arrayBuffer();
 
   const path = joinPath(joinSuffix(imgName));
-  return await sharp(buffer).webp().toFile(path);
+  return await sharp(buffer)
+    .resize({
+      width: 200,
+    })
+    .webp()
+    .toFile(path);
 }
 
 export default async function start() {
