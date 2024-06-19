@@ -81,7 +81,13 @@ async function get(): Promise<Bangumi[][]> {
   const list: Bangumi[][] = [[], [], [], [], [], [], []];
 
   const browser = await puppeteer.launch({
-    // headless: false,
+    executablePath: process.env.BROWSER_PATH,
+    args: [
+      "--disable-gpu",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--no-zygote",
+    ],
   });
 
   const page = await browser.newPage();
