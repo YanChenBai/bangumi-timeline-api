@@ -58,6 +58,8 @@ async function cacheImg(url: string) {
   return await sharp(buffer)
     .resize({
       width: 200,
+      fit: "cover",
+      position: "centre",
     })
     .webp()
     .toFile(path);
