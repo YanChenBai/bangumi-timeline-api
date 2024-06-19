@@ -30,7 +30,7 @@ export function getCacheImgName(url: string) {
 
 export async function isCacheImg(url: string) {
   const imgName = getCacheImgName(url);
-  const path = joinPath(joinSuffix(imgName));
+  const path = joinPath(imgName);
   const exists = await Bun.file(path).exists();
   return exists;
 }
