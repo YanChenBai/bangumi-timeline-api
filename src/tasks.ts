@@ -22,8 +22,8 @@ async function runTasks() {
 
   for (const [key, task] of Object.entries(tasks)) {
     try {
-      const bangumi = await task();
-      await db.set(key, bangumi);
+      const bangumi = await task.get();
+      await db.set(key, task.name, bangumi);
       console.log(`${key} done..`);
     } catch (error) {
       console.error(`${key} erro..`);

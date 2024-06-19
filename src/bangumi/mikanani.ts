@@ -6,7 +6,7 @@ function getOrgin(url: string) {
   return `${u.origin}${u.pathname}`;
 }
 
-export default async function (): Promise<Bangumi[][]> {
+async function get(): Promise<Bangumi[][]> {
   const $ = await fetch("https://mikan.bycrx.ltd")
     .then((res) => res.text())
     .then((text) => load(text));
@@ -46,3 +46,8 @@ export default async function (): Promise<Bangumi[][]> {
 
   return list;
 }
+
+export default {
+  name: "蜜柑计划",
+  get,
+};

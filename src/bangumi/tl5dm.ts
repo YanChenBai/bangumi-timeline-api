@@ -14,7 +14,7 @@ function matchEpisode(str: string) {
   }
 }
 
-export default async function () {
+async function get() {
   const $ = await fetch("https://www.5dm.link/timeline")
     .then((res) => res.text())
     .then((text) => load(text));
@@ -46,3 +46,8 @@ export default async function () {
     })
     .toArray();
 }
+
+export default {
+  name: "5DM",
+  get,
+};

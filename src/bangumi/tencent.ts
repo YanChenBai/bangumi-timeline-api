@@ -2,7 +2,7 @@ import puppeteer, { Page } from "puppeteer";
 import type { Bangumi } from "../types";
 import { getDay } from "../utils";
 
-export default async function (): Promise<Bangumi[][]> {
+async function get(): Promise<Bangumi[][]> {
   async function getCurList(page: Page) {
     const res = await page.$eval(".form-banner-module", (el) => {
       const list = el.querySelectorAll(
@@ -112,3 +112,8 @@ export default async function (): Promise<Bangumi[][]> {
 
   return list;
 }
+
+export default {
+  name: "腾讯动漫",
+  get,
+};

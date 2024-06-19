@@ -7,7 +7,7 @@ export class BangumiDB {
     this.prisma = new PrismaClient();
   }
 
-  async set(key: string, bangumi: Bangumi[][]) {
+  async set(key: string, name: string, bangumi: Bangumi[][]) {
     const value = JSON.stringify(bangumi);
     return await this.prisma.data.upsert({
       where: {
@@ -15,10 +15,12 @@ export class BangumiDB {
       },
       update: {
         value,
+        name,
       },
       create: {
         key,
         value,
+        name,
       },
     });
   }

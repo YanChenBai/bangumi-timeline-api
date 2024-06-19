@@ -41,7 +41,7 @@ interface Iconfont {
   text: string;
 }
 
-export default async function (): Promise<Bangumi[][]> {
+async function get(): Promise<Bangumi[][]> {
   const day = getDay();
   const before = day - 1;
   const after = 7 - day;
@@ -66,3 +66,8 @@ export default async function (): Promise<Bangumi[][]> {
       );
     });
 }
+
+export default {
+  name: "哔哩哔哩",
+  get,
+};
