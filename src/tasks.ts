@@ -1,5 +1,5 @@
 import { CronJob } from "cron";
-import { tencent, bilibili, mikanani, tl5dm } from "./bangumi";
+import { tencent, bilibili, mikanani, tl5dm, bangumitv } from "./bangumi";
 import cacheImagesTask from "./cacheImgs";
 import { BangumiDB } from "./db";
 import { logger } from "./log";
@@ -11,6 +11,7 @@ const tasks = {
   bilibili,
   mikanani,
   tl5dm,
+  bangumitv,
 };
 
 async function runGetTimelineTask() {
