@@ -175,3 +175,4 @@ dist
 .DS_Store
 /**/dev.db
 /src/cache/**
+/test.ts

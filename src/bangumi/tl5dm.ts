@@ -1,50 +1,73 @@
-import { load } from "cheerio";
-import path from "path";
+import puppeteer from "puppeteer";
 import type { Bangumi } from "../types";
 
-function matchEpisode(str: string) {
-  const regex = /【([^【】]*)】/;
-  const match = str.match(regex);
+async function get(): Promise<Bangumi[][]> {
+  const list: Bangumi[][] = [[], [], [], [], [], [], []];
 
-  if (match && match[1]) {
-    const content = match[1];
-    return content;
-  } else {
-    return "";
-  }
-}
+  const browser = await puppeteer.launch({
+    executablePath: process.env.BROWSER_PATH,
+    args: [
+      "--disable-gpu",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--no-zygote",
+    ],
+  });
 
-async function get() {
-  const $ = await fetch("https://www.5dm.link/timeline")
-    .then((res) => res.text())
-    .then((text) => load(text));
+  const page = await browser.newPage();
 
-  return $(".wpb_wrapper .smart-box")
-    .map((i, el) => {
-      return [
-        $(el)
-          .find(".video-item")
-          .map((i, vel) => {
-            const $vel = $(vel);
-            const cover = $vel.find("img").attr("data-original") ?? "";
-            const url = $vel.find("a").attr("href") ?? "";
-            const head = $vel.find(".item-head").text().trim();
-            const episode = matchEpisode(head);
-            const name = head.replace(`【${episode}】`, "");
+  // Navigate the page to a URL
+  await page.goto("https://www.5dm.link/timeline");
 
-            const data: Bangumi = {
-              cover,
-              url,
-              name,
-              episode,
-              updateTime: "",
-            };
-            return data;
-          })
-          .toArray(),
-      ];
-    })
-    .toArray();
+  // Set screen size
+  await page.setViewport({ width: 1080, height: 1024 });
+
+  await page.waitForSelector("#content");
+
+  const resp = await page.$eval("#content", (content) => {
+    function matchEpisode(str: string) {
+      const regex = /【([^【】]*)】/;
+      const match = str.match(regex);
+
+      if (match && match[1]) {
+        const content = match[1];
+        return content;
+      } else {
+        return "";
+      }
+    }
+
+    const days: Bangumi[][] = [];
+
+    content.querySelectorAll(".wpb_wrapper .smart-box").forEach((dayEl) => {
+      const day: Bangumi[] = [];
+      dayEl.querySelectorAll(".video-item").forEach((item) => {
+        const cover =
+          item.querySelector("img")?.getAttribute("data-original")?.trim() ??
+          "";
+        const url = item.querySelector("a")?.getAttribute("href")?.trim() ?? "";
+        const head =
+          item.querySelector(".item-head")?.textContent?.trim() ?? "";
+        const episode = matchEpisode(head);
+        const name = head.replace(`【${episode}】`, "");
+
+        day.push({
+          cover,
+          url,
+          name,
+          episode,
+          updateTime: "",
+        });
+      });
+
+      days.push(day);
+    });
+
+    return days;
+  });
+
+  await browser.close();
+  return resp;
 }
 
 export default {
