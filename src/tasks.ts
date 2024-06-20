@@ -1,7 +1,8 @@
 import { CronJob } from "cron";
 import { tencent, bilibili, mikanani, tl5dm } from "./bangumi";
-import cacheStart from "./cacheImgs";
+import cacheImagesTask from "./cacheImgs";
 import { BangumiDB } from "./db";
+import { logger } from "./log";
 
 const db = new BangumiDB();
 
@@ -12,44 +13,47 @@ const tasks = {
   tl5dm,
 };
 
-async function runTasks() {
-  console.log("start get timeline..");
+async function runGetTimelineTask() {
+  logger.info("Start get timeline..");
 
   const data = new Date();
   const startTime = data.getTime();
-
-  console.log("start time:", data);
 
   for (const [key, task] of Object.entries(tasks)) {
     try {
       const bangumi = await task.get();
       await db.set(key, task.name, bangumi);
-      console.log(`${key} done..`);
+      logger.info(`${key} done..`);
     } catch (error) {
-      console.error(`${key} erro..`);
-      console.error(error);
+      logger.error(`Get ${key} error..`);
+      logger.error(error);
     }
   }
 
   const diff = Date.now() - startTime;
-  console.log("used time:", `${(diff / 1000).toFixed(2)}s`);
-  console.log("end time:", new Date());
+  logger.info("End get timeline");
+  logger.info("Used time:", `${(diff / 1000).toFixed(2)}s`);
 }
 
-function bootstrap() {
-  const job = new CronJob(
-    "0 0 */12 * * *",
-    async function () {
-      await runTasks();
-      console.log("------------------------------------");
-      await cacheStart();
-      console.log("------------------------------------");
-    }, // onTick
+async function runTaks() {
+  logger.info("---------- Get Timeline Task ----------");
+  await runGetTimelineTask();
+  logger.info("---------- Cache Images Task ----------");
+  await cacheImagesTask();
+}
+
+const createJob = (cronTime: string) =>
+  new CronJob(
+    cronTime,
+    runTaks,
     null, // onComplete
     true, // start
     "Asia/Shanghai" // timeZone
   );
-  job.fireOnTick();
+function bootstrap() {
+  const job_12_00 = createJob("0 0 12 * * *");
+  const job_24_00 = createJob("0 0 0 * * *");
+  job_12_00.fireOnTick();
 }
 
 bootstrap();

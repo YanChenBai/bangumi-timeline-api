@@ -2,6 +2,7 @@ import sharp from "sharp";
 import { BangumiDB } from "./db";
 import { resolve } from "path";
 import fs from "node:fs/promises";
+import { logger } from "./log";
 
 const SUFFIX = "webp";
 const CACHE_PATH = "./cache";
@@ -69,7 +70,7 @@ async function cacheImg(url: string) {
 export default async function start() {
   const date = new Date();
   const startTime = Date.now();
-  console.log("start cache imgs: ", date);
+  logger.info("Start cache images");
 
   await cehckCacheDir();
 
@@ -79,14 +80,22 @@ export default async function start() {
 
   for (const platform of data) {
     const timeline = platform.value;
+    const allCount = timeline.reduce((a, b) => a + b.length, 0);
+    let counter = 0;
     for (const day of timeline) {
       for (const bangumi of day) {
-        await cacheImg(bangumi.cover);
+        try {
+          counter++;
+          await cacheImg(bangumi.cover);
+        } catch (error) {
+          logger.error(`Cache ${platform.key} image error..`);
+          logger.error(error);
+        }
       }
     }
-    console.log(platform.key, "done..");
+    logger.info(`${platform.key} (${counter}/${allCount}) done..`);
   }
 
-  console.log("end cache imgs: ", new Date());
-  console.log(`used time: ${(Date.now() - startTime).toFixed(2)}s`);
+  logger.info("End cache images");
+  logger.info(`Used time: ${(Date.now() - startTime).toFixed(2)}s`);
 }

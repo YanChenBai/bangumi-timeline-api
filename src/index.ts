@@ -1,5 +1,6 @@
 import { getCacheImgName, isCacheImg, joinPath, joinSuffix } from "./cacheImgs";
 import { BangumiDB } from "./db";
+import { logger } from "./log";
 
 const db = new BangumiDB();
 
@@ -55,7 +56,7 @@ async function bootstrap() {
     port: Number(process.env.PORT || 3000),
   });
 
-  console.log(
+  logger.info(
     `Listening on http://localhost:${server.port}, start time ${new Date()}`
   );
 
@@ -64,7 +65,7 @@ async function bootstrap() {
     stdin: "inherit",
     stdio: ["inherit", "inherit", "inherit"],
     onExit: (code) => {
-      console.log(
+      logger.info(
         `child process exited with code ${code.exitCode}, ${new Date()}`
       );
     },

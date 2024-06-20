@@ -15,6 +15,7 @@
     "@prisma/client": "^5.15.0",
     "cheerio": "^1.0.0-rc.12",
     "cron": "^3.1.7",
+    "log4js": "^6.9.1",
     "prisma": "^5.15.0",
     "puppeteer": "^22.11.1",
     "sharp": "^0.33.4"
