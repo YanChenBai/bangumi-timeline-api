@@ -15,7 +15,7 @@ async function get() {
           .find(".coverList li")
           .map((_index, el) => {
             const $el = $(el);
-            const name = $el.find(".info p").eq(0).text().trim();
+            const name = $el.find(".info").text().trim();
             const url = $el.find(".info p").eq(0).find("a").attr("href");
             const match = $el.attr("style")?.match(regex);
 
