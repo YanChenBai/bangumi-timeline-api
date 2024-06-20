@@ -1,5 +1,13 @@
-export { default as tencent } from "./tencent";
-export { default as bilibili } from "./bilibili";
-export { default as mikanani } from "./mikanani";
-export { default as tl5dm } from "./tl5dm";
-export { default as bangumitv } from "./bangumitv";
+import tencent from "./tencent";
+import bilibili from "./bilibili";
+import mikanani from "./mikanani";
+import tl5dm from "./tl5dm";
+import bangumitv from "./bangumitv";
+
+export default {
+  tencent,
+  bilibili,
+  mikanani,
+  tl5dm,
+  bangumitv,
+};

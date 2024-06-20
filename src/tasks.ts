@@ -1,18 +1,10 @@
 import { CronJob } from "cron";
-import { tencent, bilibili, mikanani, tl5dm, bangumitv } from "./bangumi";
+import bangumiOrigin from "./bangumi";
 import cacheImagesTask from "./cacheImgs";
 import { BangumiDB } from "./db";
 import { logger } from "./log";
 
 const db = new BangumiDB();
-
-const tasks = {
-  tencent,
-  bilibili,
-  mikanani,
-  tl5dm,
-  bangumitv,
-};
 
 async function runGetTimelineTask() {
   logger.info("Start get timeline..");
@@ -20,7 +12,7 @@ async function runGetTimelineTask() {
   const data = new Date();
   const startTime = data.getTime();
 
-  for (const [key, task] of Object.entries(tasks)) {
+  for (const [key, task] of Object.entries(bangumiOrigin)) {
     try {
       const bangumi = await task.get();
       await db.set(key, task.name, bangumi);
