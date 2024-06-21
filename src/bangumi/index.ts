@@ -4,6 +4,7 @@ import mikanani from "./mikanani";
 import tl5dm from "./tl5dm";
 import bangumitv from "./bangumitv";
 import yucwiki from "./yucwiki";
+import acgsecrets from "./acgsecrets";
 
 export default {
   tencent,
@@ -12,4 +13,5 @@ export default {
   tl5dm,
   bangumitv,
   yucwiki,
+  acgsecrets,
 };

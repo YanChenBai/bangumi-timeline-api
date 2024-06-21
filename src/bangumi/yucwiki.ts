@@ -1,23 +1,6 @@
 import { load } from "cheerio";
 import type { Bangumi } from "../types";
-
-function getQuarter() {
-  const date = new Date();
-  const m = date.getMonth();
-  const y = date.getFullYear();
-  let quarter = "";
-  if (m >= 1 && m < 4) {
-    quarter = "01";
-  } else if (m >= 4 && m < 7) {
-    quarter = "04";
-  } else if (m >= 7 && m < 10) {
-    quarter = "07";
-  } else if (m >= 10) {
-    quarter = "10";
-  }
-  return `${y}${quarter}`;
-}
-
+import { getQuarter } from "../utils";
 async function get(): Promise<Bangumi[][]> {
   const url = `https://yuc.wiki/${getQuarter()}`;
 
