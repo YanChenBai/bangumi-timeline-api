@@ -12,7 +12,7 @@ export function joinSuffix(name: string) {
 }
 
 export function joinPath(name: string) {
-  return resolve(__dirname, CACHE_PATH, joinSuffix(name));
+  return resolve(__dirname, CACHE_PATH, name);
 }
 
 async function cehckCacheDir() {
@@ -31,7 +31,7 @@ export function getCacheImgName(url: string) {
 
 export async function isCacheImg(url: string) {
   const imgName = getCacheImgName(url);
-  const path = joinPath(imgName);
+  const path = joinPath(joinSuffix(imgName));
   const exists = await Bun.file(path).exists();
   return exists;
 }
@@ -55,7 +55,7 @@ async function cacheImg(url: string) {
 
   const buffer = await response.arrayBuffer();
 
-  const path = joinPath(imgName);
+  const path = joinPath(joinSuffix(imgName));
   return await sharp(buffer)
     .resize({
       width: 290,

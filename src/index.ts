@@ -5,17 +5,14 @@ import { logger } from "./log";
 const db = new BangumiDB();
 
 async function getImgCache(url: URL) {
-  const img = url.searchParams.get("img");
+  const filePath = joinPath(url.pathname.replace("/img/", ""));
 
-  if (img) {
-    const isCache = await isCacheImg(img);
+  const imgFile = Bun.file(filePath);
 
-    if (isCache) {
-      const path = joinPath(getCacheImgName(img));
-      return new Response(Bun.file(path));
-    } else {
-      return new Response(Bun.file("./src/imgerror.png"));
-    }
+  const isCache = await imgFile.exists();
+
+  if (isCache) {
+    return new Response(imgFile);
   } else {
     return new Response("Params Error", { status: 400 });
   }
@@ -38,7 +35,7 @@ async function bootstrap() {
 
       if (url.pathname === "/timeline") {
         response = await getTimeline();
-      } else if (url.pathname === "/img") {
+      } else if (url.pathname.startsWith("/img/")) {
         response = await getImgCache(url);
       } else {
         response = new Response("Hello World!");
