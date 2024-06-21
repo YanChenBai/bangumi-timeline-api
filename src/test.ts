@@ -1,3 +1,3 @@
-import yucwiki from "./bangumi/acgsecrets";
+import task from "./bangumi/anilist";
 
-yucwiki.get();
+console.log(await task.get());

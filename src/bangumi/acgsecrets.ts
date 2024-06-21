@@ -1,8 +1,8 @@
 import { load } from "cheerio";
-import { getQuarter } from "../utils";
+import { getSeasonStartMonth } from "../utils";
 import type { Bangumi } from "../types";
 async function get() {
-  const url = `https://acgsecrets.hk/bangumi/${getQuarter()}`;
+  const url = `https://acgsecrets.hk/bangumi/${getSeasonStartMonth()}`;
 
   const $ = await fetch(url)
     .then((res) => res.text())

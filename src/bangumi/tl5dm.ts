@@ -2,8 +2,6 @@ import puppeteer from "puppeteer";
 import type { Bangumi } from "../types";
 
 async function get(): Promise<Bangumi[][]> {
-  const list: Bangumi[][] = [[], [], [], [], [], [], []];
-
   const browser = await puppeteer.launch({
     executablePath: process.env.BROWSER_PATH,
     args: [

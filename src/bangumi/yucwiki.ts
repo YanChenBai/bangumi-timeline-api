@@ -1,8 +1,8 @@
 import { load } from "cheerio";
 import type { Bangumi } from "../types";
-import { getQuarter } from "../utils";
+import { getSeasonStartMonth } from "../utils";
 async function get(): Promise<Bangumi[][]> {
-  const url = `https://yuc.wiki/${getQuarter()}`;
+  const url = `https://yuc.wiki/${getSeasonStartMonth()}`;
 
   const $ = await fetch(url)
     .then((res) => res.text())
