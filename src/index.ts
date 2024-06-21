@@ -14,7 +14,7 @@ async function getImgCache(url: URL) {
   if (isCache) {
     return new Response(imgFile);
   } else {
-    return new Response("Params Error", { status: 400 });
+    return new Response("Not Found", { status: 404 });
   }
 }
 
