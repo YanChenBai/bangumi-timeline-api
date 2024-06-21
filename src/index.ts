@@ -41,7 +41,10 @@ async function bootstrap() {
         response = new Response("Hello World!");
       }
 
-      response.headers.set("Access-Control-Allow-Origin", "*");
+      response.headers.set(
+        "Access-Control-Allow-Origin",
+        process.env["DOMAIN"] ?? "*"
+      );
       response.headers.set("Access-Control-Allow-Methods", "GET, POST");
       response.headers.set(
         "Access-Control-Allow-Headers",
