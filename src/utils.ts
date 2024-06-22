@@ -1,3 +1,6 @@
+import puppeteer from "puppeteer";
+import path from "path";
+
 type Season = 0 | 1 | 3 | 4;
 
 /**
@@ -40,4 +43,18 @@ export function getSeasonStartMonth() {
 export function getSeasonName() {
   const values = ["WINTER", "SPRING", "SUMMER", "FALL"];
   return values[getSeason()];
+}
+
+export async function getPuppeteer(userDataDir: string, headless?: boolean) {
+  return await puppeteer.launch({
+    headless,
+    executablePath: process.env.BROWSER_PATH,
+    userDataDir: path.resolve(__dirname, "../userData", userDataDir),
+    args: [
+      "--disable-gpu",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--no-zygote",
+    ],
+  });
 }

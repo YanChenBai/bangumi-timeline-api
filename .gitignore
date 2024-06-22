@@ -176,3 +176,4 @@ dist
 /**/dev.db
 /src/cache/**
 /test.ts
+/userData/**
