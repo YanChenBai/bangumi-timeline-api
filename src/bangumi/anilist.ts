@@ -39,7 +39,7 @@ async function getData(page: number) {
   const query = `
   query($page: Int, $season: MediaSeason, $seasonYear: Int) {
     Page(page: $page, perPage: 50) {
-      media(season: $season, seasonYear: $seasonYear, type: ANIME, sort: TRENDING_DESC) {
+      media(season: $season, seasonYear: $seasonYear, type: ANIME, sort: TRENDING_DESC, isAdult: false) {
         id
         episodes
         siteUrl
