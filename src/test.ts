@@ -1,3 +1,3 @@
-import task from "./bangumi/tl5dm";
+import task from "./bangumi/anilist";
 
 console.log(await task.get());

@@ -5,6 +5,7 @@ import tl5dm from "./tl5dm";
 import bangumitv from "./bangumitv";
 import yucwiki from "./yucwiki";
 import acgsecrets from "./acgsecrets";
+import anilist from "./anilist";
 
 export default {
   tencent,
@@ -14,4 +15,5 @@ export default {
   bangumitv,
   yucwiki,
   acgsecrets,
+  anilist,
 };

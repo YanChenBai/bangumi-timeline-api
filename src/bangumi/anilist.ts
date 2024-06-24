@@ -1,35 +1,131 @@
-import { load } from "cheerio";
 import { getSeasonName } from "../utils";
 import type { Bangumi } from "../types";
-import puppeteer from "puppeteer";
-async function get() {
+import dayjs from "dayjs";
+import { uniqBy } from "lodash-es";
+
+interface Media {
+  id: number;
+  episodes: number | null;
+  siteUrl: string;
+  coverImage: {
+    large: string;
+  };
+  nextAiringEpisode: {
+    airingAt: number;
+  } | null;
+  title: {
+    native: string;
+    chinese?: string;
+  };
+  startDate: {
+    year: number;
+    month: number;
+    day: number | null;
+  };
+}
+
+interface Resp {
+  data: {
+    Page: {
+      media: Media[];
+      pageInfo: {
+        hasNextPage: boolean;
+      };
+    };
+  };
+}
+
+async function getData(page: number) {
+  const query = `
+  query($page: Int, $season: MediaSeason, $seasonYear: Int) {
+    Page(page: $page, perPage: 50) {
+      media(season: $season, seasonYear: $seasonYear, type: ANIME, sort: TRENDING_DESC) {
+        id
+        episodes
+        siteUrl
+        coverImage {
+          large
+        }
+        nextAiringEpisode {
+          airingAt
+        }
+        title {
+          native
+        }
+        startDate {
+          year
+          month
+          day
+        }
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`;
+
   const y = new Date().getFullYear();
-  const url = `https://anilist.co/search/anime?year=${y}&season=${getSeasonName()}`;
 
-  const browser = await puppeteer.launch({
-    headless: false,
-    executablePath: process.env.BROWSER_PATH,
-    args: [
-      "--disable-gpu",
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-      "--no-zygote",
-    ],
-  });
+  const resp = await fetch("https://trace.moe/anilist", {
+    method: "POST",
+    body: JSON.stringify({
+      query,
+      variables: {
+        page,
+        season: getSeasonName(),
+        seasonYear: y,
+      },
+    }),
+    headers: { "Content-Type": "application/json" },
+  }).then(async (res) => (await res.json()) as Resp);
 
-  const page = await browser.newPage();
+  return resp.data;
+}
 
-  // Navigate the page to a URL
-  await page.goto(url);
+async function get() {
+  let medias: Media[] = [];
+  let page = 1;
+  let hasNextPage = true;
 
-  // Set screen size
-  await page.setViewport({ width: 1080, height: 1024 });
+  while (hasNextPage) {
+    console.log(page);
 
-  //   await page.waitForSelector("#content");
+    const data = await getData(page);
+    medias.push(...data.Page.media);
+    hasNextPage = data.Page.pageInfo.hasNextPage;
+    page++;
+  }
 
-  await browser.close();
+  medias = uniqBy(medias, "id");
 
-  return [];
+  const bangumis: Bangumi[][] = [[], [], [], [], [], [], [], []];
+
+  for (const media of medias) {
+    let index = 7;
+    if (media.startDate.day) {
+      const startDate = new Date(
+        media.startDate.year,
+        media.startDate.month - 1,
+        media.startDate.day
+      );
+
+      const startDay = startDate.getDay();
+      index = startDay === 0 ? 6 : startDay - 1;
+    }
+
+    bangumis[index].push({
+      name: media.title.chinese ? media.title.chinese : media.title.native,
+      cover: media.coverImage.large,
+      url: media.siteUrl,
+      episode: media.episodes ? `共${media.episodes}集` : "",
+      updateTime: media.nextAiringEpisode
+        ? dayjs(media.nextAiringEpisode.airingAt).format("MM-DD")
+        : "",
+    });
+  }
+
+  return bangumis;
 }
 
 export default { get, name: "AniList" };
