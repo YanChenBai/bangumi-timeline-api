@@ -117,9 +117,11 @@ async function get() {
       cover: media.coverImage.large,
       url: media.siteUrl,
       episode: media.episodes ? `共${media.episodes}集` : "",
-      updateTime: media.nextAiringEpisode
-        ? dayjs(media.nextAiringEpisode.airingAt).format("MM-DD")
-        : "",
+      updateTime:
+        `放送时间` +
+        (media.startDate.day
+          ? `${media.startDate.month}月${media.startDate.day}日`
+          : `${media.startDate.month}月`),
     });
   }
 

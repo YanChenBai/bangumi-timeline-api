@@ -20,8 +20,9 @@ async function getCurList(page: Page) {
           )
           ?.textContent?.trim() ?? "";
 
-      const updateTime =
+      let updateTime =
         item.querySelector(".banner-subtitle")?.textContent?.trim() ?? "";
+      updateTime = updateTime.length > 0 ? updateTime : "暂无";
 
       const cover =
         item.querySelector("img")?.getAttribute("data-src")?.trim() ?? "";
