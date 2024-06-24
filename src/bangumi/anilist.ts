@@ -89,8 +89,6 @@ async function get() {
   let hasNextPage = true;
 
   while (hasNextPage) {
-    console.log(page);
-
     const data = await getData(page);
     medias.push(...data.Page.media);
     hasNextPage = data.Page.pageInfo.hasNextPage;
