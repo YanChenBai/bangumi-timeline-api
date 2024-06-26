@@ -11,13 +11,20 @@ async function get(): Promise<Bangumi[][]> {
     .then((res) => res.text())
     .then((text) => load(text));
 
-  const list: Bangumi[][] = [[], [], [], [], [], [], []];
+  const list: Bangumi[][] = [[], [], [], [], [], [], [], []];
 
   $(".sk-bangumi").map((_i, el) => {
-    const indexStr = $(el).attr("data-dayofweek");
-    if (!indexStr || indexStr === "7") return;
+    const indexStr = Number($(el).attr("data-dayofweek") ?? 0);
 
-    const index = indexStr === "0" ? 6 : Number(indexStr) - 1;
+    let index: number;
+
+    if (indexStr >= 7) {
+      index = 7;
+    } else if (indexStr === 0) {
+      index = 6;
+    } else {
+      index = indexStr - 1;
+    }
 
     const item = $(el)
       .find("li")
