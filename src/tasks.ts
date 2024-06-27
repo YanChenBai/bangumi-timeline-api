@@ -30,8 +30,8 @@ async function runGetTimelineTask() {
 }
 
 async function runTaks() {
-  // logger.info("---------- Get Timeline Task ----------");
-  // await runGetTimelineTask();
+  logger.info("---------- Get Timeline Task ----------");
+  await runGetTimelineTask();
   logger.info("---------- Cache Images Task ----------");
   await cacheImagesTask();
 }
