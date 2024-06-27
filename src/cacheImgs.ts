@@ -5,21 +5,21 @@ import fs from "node:fs/promises";
 import { logger } from "./log";
 
 const SUFFIX = "webp";
-const CACHE_PATH = "./cache";
+const CACHE_PATH = "./.cache";
+const FULL_CACHE_PATH = resolve(__dirname, "../", CACHE_PATH);
 
 export function joinSuffix(name: string) {
   return [name, SUFFIX].join(".");
 }
 
 export function joinPath(name: string) {
-  return resolve(__dirname, CACHE_PATH, name);
+  return resolve(FULL_CACHE_PATH, name);
 }
 
 async function cehckCacheDir() {
-  const path = resolve(__dirname, CACHE_PATH);
-  const exists = await fs.exists(path);
+  const exists = await fs.exists(FULL_CACHE_PATH);
   if (!exists) {
-    await fs.mkdir(path);
+    await fs.mkdir(FULL_CACHE_PATH);
   }
 }
 

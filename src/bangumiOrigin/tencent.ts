@@ -62,6 +62,7 @@ function clickAwait(page: Page, index: number) {
       await page.click(
         `div.form-banner-head > div.banner-filter-wrap > span:nth-child(${index})`
       );
+
       const nowContent = await page.$eval(
         ".form-banner-item-wrap",
         (el) => el.textContent ?? ""
@@ -69,6 +70,7 @@ function clickAwait(page: Page, index: number) {
 
       const nowHash = Bun.hash(nowContent);
 
+      // 对比内容是否一致，不一致说明了点击成功
       if (nowHash !== startHash) {
         clearInterval(timer);
         clearTimeout(timeOutTimer);

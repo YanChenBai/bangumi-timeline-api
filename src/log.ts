@@ -6,8 +6,10 @@ log4js.configure({
     dateFile: {
       type: "dateFile",
       filename: resolve(__dirname, "../logs/run.log"),
-      //   pattern: ".yyyy-MM-dd", // 按日期分割
+      pattern: "yyyy-MM-dd", // 按日期分割
       keepFileExt: true, // 保留文件扩展名
+      alwaysIncludePattern: true, // 确保pattern始终被包含在文件名中
+      encoding: "utf-8", // 日志文件的编码
     },
     console: { type: "console" },
   },

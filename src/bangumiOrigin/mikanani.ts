@@ -18,6 +18,7 @@ async function get(): Promise<Bangumi[][]> {
 
     let index: number;
 
+    // 蜜柑的周日是0, 周一到周六时1-6, 大于7的都是其他番
     if (indexStr >= 7) {
       index = 7;
     } else if (indexStr === 0) {

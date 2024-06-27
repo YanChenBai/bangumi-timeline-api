@@ -7,7 +7,7 @@ import yucwiki from "./yucwiki";
 import acgsecrets from "./acgsecrets";
 import anilist from "./anilist";
 
-export default {
+const BangumiOrigin = {
   tencent,
   bilibili,
   mikanani,
@@ -17,3 +17,5 @@ export default {
   acgsecrets,
   anilist,
 };
+
+export default BangumiOrigin;

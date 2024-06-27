@@ -1,6 +1,5 @@
 import { getSeasonName } from "../utils";
 import type { Bangumi } from "../types";
-import dayjs from "dayjs";
 import { uniqBy } from "lodash-es";
 
 interface Media {
@@ -69,6 +68,7 @@ async function getData(page: number) {
 
   const resp = await fetch("https://trace.moe/anilist", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       query,
       variables: {
@@ -77,7 +77,6 @@ async function getData(page: number) {
         seasonYear: y,
       },
     }),
-    headers: { "Content-Type": "application/json" },
   }).then(async (res) => (await res.json()) as Resp);
 
   return resp.data;

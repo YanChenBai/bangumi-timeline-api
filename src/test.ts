@@ -1,6 +1,6 @@
-import bangumiOrigin from "./bangumi";
+import BangumiOrigin from "./bangumiOrigin";
 
-type Origin = keyof typeof bangumiOrigin;
+type Origin = keyof typeof BangumiOrigin;
 
 const origin = process.env.origin as Origin | undefined;
 let key: Origin;
@@ -10,5 +10,5 @@ if (origin) {
   key = "mikanani";
 }
 
-console.log("Test:", bangumiOrigin[key].name);
-console.log(await bangumiOrigin[key].get());
+console.log("Test:", BangumiOrigin[key].name);
+console.log(await BangumiOrigin[key].get());

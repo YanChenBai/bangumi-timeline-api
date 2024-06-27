@@ -17,6 +17,8 @@ async function get() {
             const $el = $(el);
             const name = $el.find(".info").text().trim();
             const url = $el.find(".info p").eq(0).find("a").attr("href");
+
+            /** 匹配style里的background图片的路径 */
             const match = $el.attr("style")?.match(regex);
 
             let cover = "";
