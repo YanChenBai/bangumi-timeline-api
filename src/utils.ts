@@ -22,9 +22,9 @@ function getSeason(): Season {
   } else if (m >= 4 && m < 7) {
     return 1;
   } else if (m >= 7 && m < 10) {
-    return 3;
+    return 2;
   } else {
-    return 4;
+    return 3;
   }
 }
 
