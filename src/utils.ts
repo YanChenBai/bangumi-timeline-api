@@ -15,7 +15,7 @@ export function getDay() {
 /** 获取当前季度 */
 function getSeason(): Season {
   const date = new Date();
-  const m = date.getMonth();
+  const m = date.getMonth()+1;
 
   if (m >= 1 && m < 4) {
     return 0;
