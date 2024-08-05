@@ -1,8 +1,6 @@
 import puppeteer from "puppeteer";
 import path from "path";
 
-type Season = 0 | 1 | 3 | 4;
-
 /**
  * 获取当前星期几星期一到五(1-5),星期天(7)
  */
@@ -13,7 +11,7 @@ export function getDay() {
 }
 
 /** 获取当前季度 */
-function getSeason(): Season {
+function getSeason() {
   const date = new Date();
   const m = date.getMonth()+1;
 
@@ -55,6 +53,13 @@ export async function getPuppeteer(userDataDir: string, headless?: boolean) {
       "--disable-setuid-sandbox",
       "--no-sandbox",
       "--no-zygote",
+      '--single-process',
+      '--no-first-run',
+      '--ignore-certificate-errors',
+      '--disable-dev-shm-usage',
+      '--disable-infobars',
+      '--user-data-dir=/tmp',
+      '--window-size=1200,800',
     ],
   });
 }
