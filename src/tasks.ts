@@ -8,44 +8,44 @@ const db = new BangumiDB();
 
 /** 获取时间线任务 */
 async function runGetTimelineTask() {
-  logger.info("Start get timeline..");
+	logger.info("Start get timeline..");
 
-  const data = new Date();
-  const startTime = data.getTime();
+	const data = new Date();
+	const startTime = data.getTime();
 
-  for (const [key, task] of Object.entries(BangumiOrigin)) {
-    try {
-      const bangumi = await task.get();
-      await db.set(key, task.name, bangumi);
-      logger.info(`${key} done..`);
-    } catch (error) {
-      logger.error(`Get ${key} error..`);
-      logger.error(error);
-    }
-  }
+	for (const [key, task] of Object.entries(BangumiOrigin)) {
+		try {
+			const bangumi = await task.get();
+			await db.set(key, task.name, bangumi);
+			logger.info(`${key} done..`);
+		} catch (error) {
+			logger.error(`Get ${key} error..`);
+			logger.error(error);
+		}
+	}
 
-  const diff = Date.now() - startTime;
-  logger.info("End get timeline");
-  logger.info("Used time:", `${(diff / 1000).toFixed(2)}s`);
+	const diff = Date.now() - startTime;
+	logger.info("End get timeline");
+	logger.info("Used time:", `${(diff / 1000).toFixed(2)}s`);
 }
 
 async function runTaks() {
-  logger.info("---------- Get Timeline Task ----------");
-  await runGetTimelineTask();
-  logger.info("---------- Cache Images Task ----------");
-  await cacheImagesTask();
+	logger.info("---------- Get Timeline Task ----------");
+	await runGetTimelineTask();
+	logger.info("---------- Cache Images Task ----------");
+	await cacheImagesTask();
 }
 
 const createJob = (cronTime: string) =>
-  new CronJob(
-    cronTime,
-    runTaks,
-    null, // onComplete
-    true, // start
-    "Asia/Shanghai" // timeZone
-  );
+	new CronJob(
+		cronTime,
+		runTaks,
+		null, // onComplete
+		true, // start
+		"Asia/Shanghai", // timeZone
+	);
 function bootstrap() {
-  createJob("0 0 0 * * *").fireOnTick();
+	createJob("0 0 0 * * *").fireOnTick();
 }
 
 bootstrap();
