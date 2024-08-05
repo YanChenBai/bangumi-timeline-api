@@ -12,8 +12,7 @@ export function getDay() {
 
 /** 获取当前季度 */
 function getSeason() {
-  const date = new Date();
-  const m = date.getMonth()+1;
+  const dat  const m = date.getMonth()+1;
 
   if (m >= 1 && m < 4) {
     return 0;
@@ -23,6 +22,8 @@ function getSeason() {
     return 2;
   } else {
     return 3;
+  } else {
+    return 4;
   }
 }
 
@@ -53,13 +54,6 @@ export async function getPuppeteer(userDataDir: string, headless?: boolean) {
       "--disable-setuid-sandbox",
       "--no-sandbox",
       "--no-zygote",
-      '--single-process',
-      '--no-first-run',
-      '--ignore-certificate-errors',
-      '--disable-dev-shm-usage',
-      '--disable-infobars',
-      '--user-data-dir=/tmp',
-      '--window-size=1200,800',
     ],
   });
 }
